@@ -21,14 +21,14 @@ headers = {
 #Сохраняем код сайта в фале на компьютере
 
 
-# with open("Parsing/products/index_for_products.html", "w") as file:
+# with open("index_for_products.html", "w") as file:
 #     file.write(src)
 
 
 # Создание словаря с ссылками на все страницы таблицы и его запись в .json  
 
 
-# with open("Parsing/products/index_for_products.html") as file:
+# with open("index_for_products.html") as file:
 #     src = file.read()
 
 # soup = BeautifulSoup(src, "lxml")
@@ -46,14 +46,14 @@ headers = {
 #         item_href = url + f"?page={i}"
 #         all_pages_dict[item_text] = item_href
 
-# with open("Parsing/products/all_pages_dict.json", "w") as file:
+# with open("all_pages_dict.json", "w") as file:
 #     json.dump(all_pages_dict, file, indent=4, ensure_ascii=False)
 
 
 # Создание парсера, сохраняющего файлы .csv и .json о КБЖУ продуктов
 
 
-with open("Parsing/products/all_pages_dict.json") as file:
+with open("all_pages_dict.json") as file:
     all_pages = json.load(file)
 
 cwd_ = Path.cwd()
@@ -65,10 +65,10 @@ for page_number, page_href in all_pages.items():
     req = requests.get(url=page_href, headers=headers)
     src = req.text
 
-    with open(f"Parsing/products/data/{page_number}.html", 'w') as file:
+    with open(f"data/{page_number}.html", 'w') as file:
         file.write(src)
 
-    with open(f"Parsing/products/data/{page_number}.html") as file:
+    with open(f"data/{page_number}.html") as file:
         src = file.read()
     
     soup = BeautifulSoup(src, "lxml")
@@ -80,7 +80,7 @@ for page_number, page_href in all_pages.items():
     carbohydrates = table_head[4].text
     kcal = table_head[5].text
 
-    with open(f"Parsing/products/data/{page_number}.csv", 'w', encoding="utf-8") as file:
+    with open(f"data/{page_number}.csv", 'w', encoding="utf-8") as file:
             writer = csv.writer(file)
             writer.writerow((product, proteins, fats, carbohydrates, kcal))
     
@@ -106,11 +106,11 @@ for page_number, page_href in all_pages.items():
             }
         )
 
-        with open(f"Parsing/products/data/{page_number}.csv", 'a', encoding="utf-8") as file:
+        with open(f"data/{page_number}.csv", 'a', encoding="utf-8") as file:
             writer = csv.writer(file)
             writer.writerow((title, proteins, fats, carbohydrates, kcal))
     
-    with open(f"Parsing/products/data/{page_number}.json", 'a') as file:
+    with open(f"data/{page_number}.json", 'a') as file:
             json.dump(product_data_dict, file, indent=4, ensure_ascii=False)
    
     print(f"Записана страница: {page_number}. Продолжается сбор данных...")
